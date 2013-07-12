@@ -555,3 +555,5 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
 if (file_exists('/var/www/site-php')) {
   require('/var/www/site-php/d7cloud/d7cloud-settings.inc');
 }
+
+if (file_exists(dirname(__FILE__) . '/devdesktop-settings.inc')) require('devdesktop-settings.inc');
