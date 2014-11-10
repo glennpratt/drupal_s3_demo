@@ -853,8 +853,14 @@ function image_style_deliver($style, $scheme) {
   }
 
   if ($success) {
-    $image = image_load($derivative_uri);
-    file_transfer($image->source, array('Content-Type' => $image->info['mime_type'], 'Content-Length' => $image->info['file_size']));
+    // Redirect non-private file requests to avoid PHP proxying.
+    if ($scheme != 'private' && $wrapper = file_stream_wrapper_get_instance_by_uri($derivative_uri)) {
+      drupal_goto($wrapper->getExternalUrl());
+    }
+    else {
+      $image = image_load($derivative_uri);
+      file_transfer($image->source, array('Content-Type' => $image->info['mime_type'], 'Content-Length' => $image->info['file_size']));
+    }
   }
   else {
     watchdog('image', 'Unable to generate the derived image located at %path.', array('%path' => $derivative_uri));
